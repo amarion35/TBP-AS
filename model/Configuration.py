@@ -5,9 +5,11 @@ class Configuration:
     pile = []
     arbre = []
     ref_arbre = []
+    root = ''
 
     def __init__(self, filename):
         self.word_list = []
+        self.pile = []
         self.buffer = self.get_words(filename)
         self.oracle = Oracle(filename)
         self.ref_arbre = self.oracle.predict()
@@ -21,13 +23,13 @@ class Configuration:
         return self.pile[-1], self.buffer[0]
 
     def shift(self):
-        pass
+        self.pile.append(self.buffer.pop(0))
 
     def left(self):
+        assert len(self.pile)>1, 'The stack is too short for a left-arc transition'
+        assert self.pile[-2]!=root, "You can't make a transition from a word to the root"
         pass
 
     def right(self):
-        pass
-
-    def reduc(self):
+        assert len(self.pile)>1, 'The stack is too short for a right-arc transition'
         pass

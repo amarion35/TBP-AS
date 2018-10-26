@@ -21,13 +21,13 @@ class Configuration:
         return self.pile[-1], self.buffer[0]
 
     def shift(self):
-        pass
+        self.pile.append(self.buffer.pop(0))
 
-    def left(self):
-        pass
+    def left(self,type_transition):
+        #ajoute arc [mot buffer,type_trans,mot pile] a l abre et supprime mot du dessus de la pile
+        arbre.append([self.buffer[0],type_transition,self.pile.pop(-1)])
 
     def right(self):
-        pass
-
-    def reduc(self):
-        pass
+        #ajoute arc [mot pile,type_tran,mot buffer] a l arbre et supprime mot dessus de la pile pour l ajouter au debut du buffer
+        arbre.append([self.pile[-1],type_transition,self.buffer[0]])
+        self.buffer.insert(0,self.pile.pop(-1))

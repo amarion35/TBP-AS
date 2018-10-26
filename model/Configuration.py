@@ -29,7 +29,7 @@ class Configuration:
 
     def left(self,type_transition):
         assert len(self.pile)>1, 'The stack is too short for a left-arc transition'
-        assert self.pile[-2]!=this.root, "You can't make a transition from a word to the root"
+        assert self.pile[-2]!=self.root, "You can't make a transition from a word to the root"
         #ajoute arc [mot buffer,type_trans,mot pile] a l abre et supprime mot du dessus de la pile
         self.arbre.append([self.buffer[0],type_transition,self.pile.pop(-1)])
 
@@ -37,4 +37,5 @@ class Configuration:
         assert len(self.pile)>1, 'The stack is too short for a right-arc transition'
         #ajoute arc [mot pile,type_tran,mot buffer] a l arbre et supprime mot dessus de la pile pour l ajouter au debut du buffer
         self.arbre.append([self.pile[-1],type_transition,self.buffer[0]])
-        self.buffer.insert(0,self.pile.pop(-1))
+        #self.buffer.insert(0,self.pile.pop(-1))
+        self.pile.pop(-1) # Pour moi c'est juste ça

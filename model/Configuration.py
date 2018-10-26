@@ -18,6 +18,8 @@ class Configuration:
         return words
 
     def get_couple(self):
+        #a remplacer par une fonction featurize(config(config contient les datas du conllu grace a la fonction du prof),fm)
+        #qui renvoi l'entree pour le classifieur 
         return self.pile[-1], self.buffer[0]
 
     def shift(self):

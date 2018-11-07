@@ -5,7 +5,7 @@ from WordBuffer import WordBuffer
 mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
 wb = WordBuffer(mcd);
-wb.readFromConlluFile("UD_French-GSD/fr_gsd-ud-train.conllu");
+wb.readFromConlluFile("../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu");
 
 #wb.affiche(mcd)
 print(len(wb.array))

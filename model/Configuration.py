@@ -1,4 +1,6 @@
-import Oracle
+#import Oracle
+import sys
+from WordBuffer import WordBuffer
 
 class Configuration:
     buffer = []
@@ -6,36 +8,49 @@ class Configuration:
     arbre = []
     ref_arbre = []
     root = ''
+    mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
-    def __init__(self, filename):
+    def __init__(self):
         self.word_list = []
         self.pile = []
-        self.buffer = self.get_words(filename)
-        self.oracle = Oracle(filename)
-        self.ref_arbre = self.oracle.predict()
+        self.buffer = WordBuffer(mcd)
+        self.buffer.readFromConlluFile("../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu")
+        #self.oracle = Oracle()
+        #self.ref_arbre = self.oracle.predict()
+        self.transitions = []
 
-    def get_words(self, filename):
-        phrases =  ''.join([line for line in open(filename, 'r')]).split('.')
-        words = [p.split(' ') for p in phrases]
-        return words
+    def oracle(self):
+        while self.buffer.nextSentence():
+            self.pile = [-1]
+            buffer_word = self.buffer.getCurrentWord()
+            buffer_index = self.buffer.getCurrentIndex()
+            pile_word = self.buffer.getWord(self.pile[-1])
+            pile_index = self.pile[-1]
 
-    def get_couple(self):
-        #a remplacer par une fonction featurize(config(config contient les datas du conllu grace a la fonction du prof),fm)
-        #qui renvoi l'entree pour le classifieur 
-        return self.pile[-1], self.buffer[0]
+            # TODO fin si buffer vide
+            if pile_index == buffer_word.getFeat('GOV'):
+                self.transition.append({'transition': 'right', 'type': buffer_word.getFeat('LABEL')})
+            elif pile_word.getFeat('GOV') == buffer_index:
+                self.transition.append({'transition': 'left', 'type': pile_word.getFeat('LABEL')})
+            else:
+                self.transition.append({'transition': 'shift'})
+
+
 
     def shift(self):
-        self.pile.append(self.buffer.pop(0))
+        self.pile.append(self.buffer.getCurrentIndex())
+        self.buffer.currentIndex += 1
 
     def left(self,type_transition):
         assert len(self.pile)>1, 'The stack is too short for a left-arc transition'
-        assert self.pile[-2]!=self.root, "You can't make a transition from a word to the root"
+        assert self.buffer.getWord(self.pile[-2])!=self.root, "You can't make a transition from a word to the root"
         #ajoute arc [mot buffer,type_trans,mot pile] a l abre et supprime mot du dessus de la pile
-        self.arbre.append([self.buffer[0],type_transition,self.pile.pop(-1)])
+        self.buffer.getCurrentWord().setFeat('type_transition', type_transition)
+        self.buffer.getCurrentWord().setFeat('gov', self.buffer.getWord(self.pile.pop(-1)))
 
     def right(self, type_transition):
         assert len(self.pile)>1, 'The stack is too short for a right-arc transition'
         #ajoute arc [mot pile,type_tran,mot buffer] a l arbre et supprime mot dessus de la pile pour l ajouter au debut du buffer
-        self.arbre.append([self.pile[-1],type_transition,self.buffer[0]])
-        #self.buffer.insert(0,self.pile.pop(-1))
-        self.pile.pop(-1) # Pour moi c'est juste ça
+        pile_index = self.pile.pop(-1)
+        self.buffer.getWord(pile_index).setFeat('type_transition', type_transition)
+        self.buffer.getWord(pile_index).setFeat('gov', self.buffer.getCurrentWord())

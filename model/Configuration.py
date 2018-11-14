@@ -1,39 +1,40 @@
 #import Oracle
 import sys
 from WordBuffer import WordBuffer
+from Word import Word
 
 class Configuration:
     buffer = []
     pile = []
     arbre = []
     ref_arbre = []
-    root = ''
     mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+    root = Word.fakeWord(mcd)
 
     def __init__(self):
         self.word_list = []
         self.pile = []
-        self.buffer = WordBuffer(mcd)
+        self.buffer = WordBuffer(self.mcd)
         self.buffer.readFromConlluFile("../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu")
-        #self.oracle = Oracle()
-        #self.ref_arbre = self.oracle.predict()
         self.transitions = []
 
     def oracle(self):
-        while self.buffer.nextSentence():
-            self.pile = [-1]
-            buffer_word = self.buffer.getCurrentWord()
-            buffer_index = self.buffer.getCurrentIndex()
-            pile_word = self.buffer.getWord(self.pile[-1])
-            pile_index = self.pile[-1]
+        sentence = self.buffer.nextSentence()
+        while sentence:
+            while sentence != [] and self.pile == [self.root]: # A vérifier
+                # TODO fin si buffer vide
+                buffer_word = sentence[0]
+                buffer_index = buffer_word.getFeat('INDEX')
+                pile_word = self.pile[-1]
+                pile_index = pile_word.getFeat('INDEX')
+                if pile_index == buffer_word.getFeat('GOV'):
+                    self.transitions.append({'transition': 'right', 'type': buffer_word.getFeat('LABEL')})
+                elif pile_word.getFeat('GOV') == buffer_index:
+                    self.transitions.append({'transition': 'left', 'type': pile_word.getFeat('LABEL')})
+                else:
+                    self.transitions.append({'transition': 'shift'})
 
-            # TODO fin si buffer vide
-            if pile_index == buffer_word.getFeat('GOV'):
-                self.transition.append({'transition': 'right', 'type': buffer_word.getFeat('LABEL')})
-            elif pile_word.getFeat('GOV') == buffer_index:
-                self.transition.append({'transition': 'left', 'type': pile_word.getFeat('LABEL')})
-            else:
-                self.transition.append({'transition': 'shift'})
+            sentence = self.buffer.nextSentence()
 
 
 
@@ -54,3 +55,4 @@ class Configuration:
         pile_index = self.pile.pop(-1)
         self.buffer.getWord(pile_index).setFeat('type_transition', type_transition)
         self.buffer.getWord(pile_index).setFeat('gov', self.buffer.getCurrentWord())
+

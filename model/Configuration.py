@@ -2,6 +2,7 @@
 import sys
 from WordBuffer import WordBuffer
 from Word import Word
+from Oracle import Oracle
 
 class Configuration:
     buffer = []
@@ -10,33 +11,15 @@ class Configuration:
     ref_arbre = []
     mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
     root = Word.fakeWord(mcd)
+    filename = "../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu"
 
     def __init__(self):
         self.word_list = []
         self.pile = []
         self.buffer = WordBuffer(self.mcd)
-        self.buffer.readFromConlluFile("../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu")
+        self.buffer.readFromConlluFile(self.filename)
+        self.oracle = Oracle(self.filename)
         self.transitions = []
-
-    def oracle(self):
-        sentence = self.buffer.nextSentence()
-        while sentence:
-            while sentence != [] and self.pile == [self.root]: # A vérifier
-                # TODO fin si buffer vide
-                buffer_word = sentence[0]
-                buffer_index = buffer_word.getFeat('INDEX')
-                pile_word = self.pile[-1]
-                pile_index = pile_word.getFeat('INDEX')
-                if pile_index == buffer_word.getFeat('GOV'):
-                    self.transitions.append({'transition': 'right', 'type': buffer_word.getFeat('LABEL')})
-                elif pile_word.getFeat('GOV') == buffer_index:
-                    self.transitions.append({'transition': 'left', 'type': pile_word.getFeat('LABEL')})
-                else:
-                    self.transitions.append({'transition': 'shift'})
-
-            sentence = self.buffer.nextSentence()
-
-
 
     def shift(self):
         self.pile.append(self.buffer.getCurrentIndex())

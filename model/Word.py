@@ -1,6 +1,11 @@
 class Word:
+
     def __init__(self):
         self.featDic = {}
+
+    def __repr__(self):
+        return " *{}".format(self.getFeat('FORM'))
+        
 
     def getFeat(self, featName):
         if(not featName in self.featDic):

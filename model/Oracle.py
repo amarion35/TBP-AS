@@ -8,6 +8,7 @@ class Oracle:
     def __init__(self, filename):
         self.buffer = WordBuffer(self.mcd)
         self.buffer.readFromConlluFile(filename)
+        self.features = []
         self.transitions = []
     
     def search_transitions(self):

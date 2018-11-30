@@ -1,0 +1,80 @@
+# sent_id = fr-ud-train_00001
+# text = Les commotions cérébrales sont devenu si courantes dans ce sport qu'on les considére presque comme la routine.
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
+2	commotions	commotion	NOUN	_	Gender=Fem|Number=Plur	5	nsubj	_	_
+3	cérébrales	cérébral	ADJ	_	Gender=Fem|Number=Plur	2	amod	_	_
+4	sont	être	AUX	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	5	aux	_	_
+5	devenu	devenir	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	Correct=devenues
+6	si	si	ADV	_	_	7	advmod	_	_
+7	courantes	courant	ADJ	_	Gender=Fem|Number=Plur	5	xcomp	_	_
+8	dans	dans	ADP	_	_	10	case	_	_
+9	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	10	det	_	_
+10	sport	sport	NOUN	_	Gender=Masc|Number=Sing	7	obl:mod	_	_
+11	qu'	que	SCONJ	_	_	14	mark	_	SpaceAfter=No
+12	on	on	PRON	_	Gender=Masc|Number=Sing|Person=3	14	nsubj	_	_
+13	les	le	PRON	_	Number=Plur|Person=3|PronType=Prs	14	obj	_	_
+14	considére	considérer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	7	advcl	_	_
+15	presque	presque	ADV	_	_	14	advmod	_	_
+16	comme	comme	ADP	_	_	18	case	_	_
+17	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
+18	routine	routine	NOUN	_	Gender=Fem|Number=Sing	14	obl	_	SpaceAfter=No
+19	.	.	PUNCT	_	_	5	punct	_	_
+
+
+# sent_id = fr-ud-train_04234
+# text = Il est caractérisé par un excès de masse de 35 443 677 ± 2 036 eV/c2 et une énergie de liaison nucléaire de 1 766 691 409 ± 2 061 eV.
+1	Il	il	PRON	_	Gender=Masc|Number=Sing|Person=3|PronType=Prs	3	nsubj:pass	_	_
+2	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	aux:pass	_	_
+3	caractérisé	caractériser	VERB	_	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+4	par	par	ADP	_	_	6	case	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	excès	excès	NOUN	_	Gender=Masc|Number=Sing	3	obl:agent	_	_
+7	de	de	ADP	_	_	8	case	_	_
+8	masse	masse	NOUN	_	Gender=Fem|Number=Sing	6	nmod	_	_
+9	de	de	ADP	_	_	10	case	_	_
+10	35 443 677	35 443 677	NUM	_	_	6	nmod	_	_
+11	±	±	SYM	_	_	10	nmod	_	_
+12	2 036	2 036	NUM	_	_	11	nummod	_	_
+13	eV/c2	eV/c2	X	_	_	12	nummod	_	_
+14	et	et	CCONJ	_	_	16	cc	_	_
+15	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	16	det	_	_
+16	énergie	énergie	NOUN	_	Gender=Fem|Number=Sing	6	conj	_	_
+17	de	de	ADP	_	_	18	case	_	_
+18	liaison	liaison	NOUN	_	Gender=Fem|Number=Sing	16	nmod	_	_
+19	nucléaire	nucléaire	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+20	de	de	ADP	_	_	21	case	_	_
+21	1 766 691 409	1 766 691 409	NUM	_	_	16	nmod	_	_
+22	±	±	SYM	_	_	21	nmod	_	_
+23	2 061	2 061	NUM	_	_	22	nummod	_	_
+24	eV	eV	X	_	_	23	nummod	_	SpaceAfter=No
+25	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-train_00073
+# text = À partir du XXIe siècle, les recensements réels des communes de moins de 10 000 habitants ont lieu tous les cinq ans.
+1	À	à	ADP	_	_	6	case	_	_
+2	partir	partir	VERB	_	VerbForm=Inf	1	fixed	_	_
+3-4	du	_	_	_	_	_	_	_	_
+3	de	de	ADP	_	_	1	fixed	_	_
+4	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+5	XXIe	XXIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	6	amod	_	_
+6	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	19	obl:mod	_	SpaceAfter=No
+7	,	,	PUNCT	_	_	19	punct	_	_
+8	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	9	det	_	_
+9	recensements	recensement	NOUN	_	Gender=Masc|Number=Plur	19	nsubj	_	_
+10	réels	réel	ADJ	_	Gender=Masc|Number=Plur	9	amod	_	_
+11-12	des	_	_	_	_	_	_	_	_
+11	de	de	ADP	_	_	13	case	_	_
+12	les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	13	det	_	_
+13	communes	commune	NOUN	_	Gender=Fem|Number=Plur	9	nmod	_	_
+14	de	de	ADP	_	_	18	case	_	_
+15	moins	moins	ADV	_	_	18	det	_	_
+16	de	de	ADP	_	_	15	fixed	_	_
+17	10 000	10 000	NUM	_	_	18	nummod	_	_
+18	habitants	habitant	NOUN	_	Gender=Masc|Number=Plur	13	nmod	_	_
+19	ont	avoir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+20	lieu	lieu	NOUN	_	Gender=Masc|Number=Sing	19	obj	_	_
+21	tous	tout	DET	_	Gender=Masc|Number=Plur	24	det	_	_
+22	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	24	det	_	_
+23	cinq	cinq	NUM	_	_	24	nummod	_	_
+24	ans	an	NOUN	_	Gender=Masc|Number=Plur	19	obl	_	SpaceAfter=No
+25	.	.	PUNCT	_	_	19	punct	_	_

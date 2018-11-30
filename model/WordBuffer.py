@@ -78,7 +78,7 @@ class WordBuffer:
                         else :
 #                                1	Je	il	PRON	_	Number=Sing|Person=1|PronType=Prs	2	nsubj	_	_
 #featModel = (('B', 0, 'POS'),('S', 0, 'POS'), ('B', 0, 'GOV'), ('S', 0, 'GOV'), ('B', -1, 'POS'), ('B', 1, 'POS'))
-                                tokens = ligne.split()
+                                tokens = ligne.split('\t')
                                 if '-' not in tokens[0]:
                                         w = Word()
                                         for i in range(0, len(tokens)):

@@ -12,6 +12,8 @@ class Oracle:
         self.transitions = []
     
     def search_transitions(self):
+        self.features = []
+        self.transitions = []
         sentence = self.buffer.nextSentence()
         i = 0
         while sentence:
@@ -22,6 +24,15 @@ class Oracle:
             pile = [root]
             try:
                 while sentence != [root]: # A vérifier
+                    self.features.append([
+                        pile[-1].getFeat('POS'),
+                        pile[-1].getFeat('LEMMA'),
+                        pile[-1].getFeat('MORPHO'),
+                        sentence[0].getFeat('POS'),
+                        sentence[0].getFeat('LEMMA'),
+                        sentence[0].getFeat('MORPHO'),
+                        eval(sentence[0].getFeat('INDEX'))-eval(pile[-1].getFeat('INDEX'))
+                    ])
                     buffer_word = sentence[0]
                     buffer_index = buffer_word.getFeat('INDEX')
                     pile_word = pile[-1]

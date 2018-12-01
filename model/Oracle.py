@@ -21,8 +21,10 @@ class Oracle:
             root = sentence.pop(0)
             root.setFeat('INDEX', '0')
             pile = [root]
+            save_sentence = sentence
             try:
                 while sentence != [root]: # A vérifier
+                    last_word_index = eval(sentence[0].getFeat('INDEX'))-1
                     self.features.append([
                         pile[-1].getFeat('POS'),
                         pile[-1].getFeat('LEMMA'),
@@ -32,6 +34,7 @@ class Oracle:
                         sentence[0].getFeat('LEMMA'),
                         sentence[0].getFeat('MORPHO'),
                         sentence[1].getFeat('POS') if len(sentence)>1 else "nan",
+                        save_sentence[last_word_index].getFeat('POS') if (len(save_sentence)>last_word_index and last_word_index>-1) else "nan",
                         eval(sentence[0].getFeat('INDEX'))-eval(pile[-1].getFeat('INDEX'))
                     ])
                     buffer_word = sentence[0]

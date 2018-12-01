@@ -1,4 +1,6 @@
+import numpy as np
 
+from keras.models import Sequential, Model
 from keras.layers import Dense, Embedding, Flatten, Input, Dropout, BatchNormalization, Input, Concatenate
 from keras.optimizers import Adam
 
@@ -15,6 +17,9 @@ class TBP_AS_model():
         
         model = Sequential()
         model.add(Dense(input_shape, input_shape=(input_shape,), activation='relu'))
+        model.add(Dense(256, activation='relu'))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.2))
         model.add(Dense(128, activation='relu'))
         model.add(BatchNormalization())
         model.add(Dropout(0.2))
@@ -37,12 +42,11 @@ class TBP_AS_model():
 
         transition = Dense(3, activation="tanh")(output)
 
-        self.classifier =  Model(input_features, transition)
+        classifier =  Model(input_features, transition)
 
-        optimizer = Adam(0.0002, 0.5)
-        losses = ['binary_crossentropy']
-        self.classifier.compile(loss=losses,
-                    optimizer=optimizer,
+        losses = ['categorical_crossentropy']
+        classifier.compile(loss=losses,
+                    optimizer='adam',
                     metrics=['accuracy'])
 
-        self.classifier.summary()
+        classifier.summary()

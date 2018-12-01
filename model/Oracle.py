@@ -18,7 +18,6 @@ class Oracle:
         i = 0
         while sentence:
             i += 1
-            print(i)
             root = sentence.pop(0)
             root.setFeat('INDEX', '0')
             pile = [root]
@@ -28,9 +27,11 @@ class Oracle:
                         pile[-1].getFeat('POS'),
                         pile[-1].getFeat('LEMMA'),
                         pile[-1].getFeat('MORPHO'),
+                        pile[-2].getFeat('POS') if len(pile)>1 else "nan",
                         sentence[0].getFeat('POS'),
                         sentence[0].getFeat('LEMMA'),
                         sentence[0].getFeat('MORPHO'),
+                        sentence[1].getFeat('POS') if len(sentence)>1 else "nan",
                         eval(sentence[0].getFeat('INDEX'))-eval(pile[-1].getFeat('INDEX'))
                     ])
                     buffer_word = sentence[0]
@@ -55,6 +56,7 @@ class Oracle:
                     #print(t)
                     #print(pile, sentence)
             except Exception:
-                print('Error abort this sentence')
+                #print('Error abort this sentence')
+                pass
             sentence = self.buffer.nextSentence()
         return self.transitions

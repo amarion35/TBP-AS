@@ -7,14 +7,14 @@ from keras.optimizers import Adam
 class TBP_AS_model():
     def __init__(self, vocs):
         n_features = len(vocs)
-        
+
         input_features = [Input(shape=(1,)) for _ in range(n_features)]
         features = [Embedding(len(vocs[i]), min(32, len(vocs[i])))(f) for i,f in enumerate(input_features)]
         features = [Flatten()(f) for i,f in enumerate(features)]
         features = Concatenate()(features)
-        
+
         input_shape = np.sum([min(32, len(vocs[i])) for i,f in enumerate(input_features)])
-        
+
         model = Sequential()
         model.add(Dense(input_shape, input_shape=(input_shape,), activation='relu'))
         model.add(Dense(256, activation='relu'))
@@ -39,7 +39,7 @@ class TBP_AS_model():
         model.add(BatchNormalization())
 
         output = model(features)
-
+        
         transition = Dense(3, activation="tanh")(output)
 
         classifier =  Model(input_features, transition)
@@ -50,3 +50,4 @@ class TBP_AS_model():
                     metrics=['accuracy'])
 
         classifier.summary()
+        self.classifier = classifier

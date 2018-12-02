@@ -30,6 +30,7 @@ class Word:
         for elt in mcd:
             feat, status = elt
             w.setFeat(feat, 'ROOT')
+        w.setFeat('INDEX', '-1')
         return w
 
     @staticmethod

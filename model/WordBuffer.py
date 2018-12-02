@@ -111,3 +111,24 @@ class WordBuffer:
                         return True
                 else:
                         return False
+
+        def to_conllu(self, filename):
+                self.currentIndex = 0
+                sentence = self.nextSentence()
+                conllu_str = ""
+                i = 0
+                while sentence:
+                        i+=1
+                        conllu_str += "# sent_id = {}_{}".format(filename, i)
+                        conllu_str += "\n"
+                        conllu_str += "# text = {}".format(" ".join([w.getFeat("FORM") for w in sentence[1:]]))
+                        conllu_str += "\n"
+                        for w in sentence[1:]:
+                                features = [w.getFeat(k[0]) for k in self.mcd]
+                                conllu_str += "\t".join(features)
+                                #conllu_str += "\n"
+                        sentence = self.nextSentence()
+                        conllu_str += "\n"
+
+                with open(filename, 'w', encoding='utf-8') as f:
+                        f.write(conllu_str)

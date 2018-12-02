@@ -1,16 +1,20 @@
 import numpy as np
+import os
+from pathlib import Path
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+import pickle
+import argparse
 
 from Configuration import Configuration
 from Oracle import Oracle
-from Model import TBP_AS_model
+#from Model import TBP_AS_model
 
 filename = "../UD_French-GSD/UD_French-GSD/fr_gsd-ud-train.conllu"
 
-
-if __name__=='__main__':
+def train(filename):
     oracle = Oracle(filename)
-    print('oracle parse transitions...')
+    print('oracle transitions parsing...')
     oracle.search_transitions()
 
     x = np.array(oracle.features)
@@ -29,16 +33,54 @@ if __name__=='__main__':
             
     y = np.array(new_y)
 
-    vocs = [np.array(list(set(x[:,i]))) for i in range(np.shape(x)[1])]
-    
     print('sparse encoding of features...')
-    x_new = [[np.argwhere(vocs[j]==x[i,j]) for j,feature in enumerate(features)] for i,features in enumerate(x)]
+    vocs, inverses = zip(*(np.unique(feature, return_inverse=True) for feature in x.T))
+    x_new = np.vstack(inverses).T
     x_new = np.squeeze(x_new)
 
-    model = TBP_AS_model(vocs)
-    classifier = model.classifier
+    clf = DecisionTreeClassifier(random_state=0)
+    clf.fit(x_new, y)
 
-    X_train, X_test, y_train, y_test = train_test_split(x_new, y, test_size=0.33, random_state=42)
+    pickle.dump(vocs, open("vocs.p", "wb"))
+    pickle.dump(clf, open("model.p", "wb"))
 
-    print('model training...')
-    classifier.fit(X_train.T.tolist(), y_train, batch_size=1024, epochs=10, verbose=1, validation_data=(X_test.T.tolist(), y_test))
+def predict(filename):
+    print('load model...')
+    clf = pickle.load(open("model.p", "rb"))
+    vocs = pickle.load(open("vocs.p", "rb"))
+    print('load configuration...')
+    conf = Configuration(filename)
+    print('predict transitions...')
+    i=0
+    while conf.next_sentence():
+        i+=1
+        print(i)
+        try:
+            while not conf.end():
+                features = conf.get_features()
+                features = np.squeeze([np.argwhere(str(f)==vocs[i]) for i,f in enumerate(features)])
+                transition = clf.predict([features])[0]
+                if transition[0]==1:
+                    conf.shift()
+                elif transition[1]==1:
+                    conf.right('unknown')
+                elif transition[2]==1:
+                    conf.left('unknown')
+        except:
+            pass
+    print('save configuration in result.conllu...')
+    conf.to_collu('result.conllu')
+
+if __name__=='__main__':
+    #train(filename)
+    parser = argparse.ArgumentParser(description='TBP-AS classifier')
+    parser.add_argument('filename', type=str, nargs='+',
+                    help='file')
+    parser.add_argument('--train', dest='function', action='store_const',
+                        const=train, default=predict,
+                        help='train a new model')
+
+    args = parser.parse_args()
+    filename = args.filename[0]
+    print(filename)
+    args.function(filename)

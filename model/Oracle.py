@@ -1,6 +1,7 @@
 import re
 from Word import Word
 from WordBuffer import WordBuffer
+import numpy as np
 
 class Oracle:
     mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
@@ -22,10 +23,12 @@ class Oracle:
             root.setFeat('INDEX', '0')
             pile = [root]
             save_sentence = sentence
+            s_features = []
+            s_transitions = []
             try:
                 while sentence != [root]: # A vérifier
                     last_word_index = eval(sentence[0].getFeat('INDEX'))-1
-                    self.features.append([
+                    s_features.append([
                         pile[-1].getFeat('POS'),
                         pile[-1].getFeat('LEMMA'),
                         pile[-1].getFeat('MORPHO'),
@@ -44,22 +47,23 @@ class Oracle:
                     buff_links = [w.getFeat('GOV') for w in sentence[1:]]
                     if pile_index == buffer_word.getFeat('GOV') and buffer_index not in buff_links: # et il ne reste pas d'autres relations avec le mot du buffer
                         t = {'transition': 'right', 'type': buffer_word.getFeat('LABEL')}
-                        self.transitions.append(t)
+                        s_transitions.append(t)
                         sentence.pop(0)
                         sentence.insert(0, pile.pop(-1))
                     elif pile_word.getFeat('GOV') == buffer_index and pile_index not in buff_links:
                         t = {'transition': 'left', 'type': pile_word.getFeat('LABEL')}
-                        self.transitions.append(t)
+                        s_transitions.append(t)
                         pile.pop(-1)
                     else:
                         t = {'transition': 'shift'}
-                        self.transitions.append(t)
+                        s_transitions.append(t)
                         pile.append(buffer_word)
                         sentence.pop(0)
-                    #print(t)
-                    #print(pile, sentence)
+                self.features.append(s_features)
+                self.transitions.append(s_transitions)
             except Exception:
                 #print('Error abort this sentence')
                 pass
             sentence = self.buffer.nextSentence()
-        return self.transitions
+        self.features = [self.features[i][j] for i in range(len(self.features)) for j in range(len(self.features[i]))]
+        self.transitions = [self.transitions[i][j] for i in range(len(self.transitions)) for j in range(len(self.transitions[i]))]

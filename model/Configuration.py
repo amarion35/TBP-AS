@@ -26,6 +26,9 @@ class Configuration:
         self.sentence = self.buffer.nextSentence()
         if not self.sentence: return False
         self.pile=[self.root]
+        for i in range(len(self.sentence)):
+            self.buffer.getWord(i).setFeat("LABEL", "_")
+            self.buffer.getWord(i).setFeat("GOV", "_")
         return True
 
     def end(self):
